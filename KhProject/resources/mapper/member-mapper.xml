@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+
+	<select id="login"
+	        resultType="com.kh.java.member.model.vo.Member"
+	        parameterType="com.kh.java.member.model.vo.Member">
+		SELECT
+		       USER_NO userNo
+		     , USER_ID userId
+		     , USER_PWD userPwd
+		     , USER_NAME userName
+		     , EMAIL
+		     , ENROLL_DATE enrollDate
+		     , MODIFY_DATE modifyDate
+		     , STATUS
+		  FROM
+		       KH_MEMBER
+		 WHERE
+		 	   USER_ID = #{userId}
+		   AND
+		       USER_PWD = #{userPwd}
+	       AND
+	           STATUS = 'Y' 
+	</select>
+	
+	<insert id="signUp"
+			parameterType="com.kh.java.member.model.vo.Member">
+		INSERT
+		  INTO
+		       KH_MEMBER
+		       (
+		       USER_NO
+		     , USER_ID
+		     , USER_PWD
+		     , USER_NAME
+		     , EMAIL
+		       )
+		VALUES
+		       (
+		       KH_UNO.NEXTVAL
+		     , #{userId}
+		     , #{userPwd}
+		     , #{userName}
+		     , #{email}
+		       )
+	</insert>
+	
+	<update id="update">
+		UPDATE
+		       KH_MEMBER
+		   SET
+		       USER_NAME = #{userName}
+		     , EMAIL = #{email}
+		     , MODIFY_DATE = SYSDATE
+		 WHERE
+		       USER_NO = #{userNo}
+		   AND
+		       STATUS = 'Y'
+	</update>
+	
+	<update id="delete">
+		UPDATE
+		       KH_MEMBER
+		   SET
+		       STATUS = 'N'
+		     , MODIFY_DATE = SYSDATE
+		 WHERE
+		       USER_NO = #{userNo}
+		   AND
+		       USER_PWD = #{userPwd}
+		   AND
+		       STATUS = 'Y'
+	</update>
+	
+	<update id="updatePwd">
+		UPDATE
+		       KH_MEMBER
+		   SET
+		       USER_PWD = #{updatePwd}
+		 WHERE
+		       USER_NO = #{userNo}
+		   AND
+		       USER_PWD = #{userPwd}
+		   AND
+		       STATUS = 'Y'
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+ 
+</mapper>

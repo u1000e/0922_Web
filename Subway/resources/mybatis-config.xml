@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- settings : 설정들을 작성하는 영역 -->
+	<settings>
+		<!-- 만약에 빈 값이 들어오면 빈 칸이 아니라 NULL값으로 인식하겠다. -->
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<!-- 꼭 대문자로 NULL써야함 -->
+	</settings>
+	
+
+	<typeAliases>
+
+	</typeAliases>
+	
+	<environments default="development">
+		<environment id="development">
+		
+			<transactionManager type="JDBC" />
+			
+			<dataSource type="UNPOOLED">
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
+				<property name="url" value="jdbc:oracle:thin:@115.90.212.20:10000:XE" />
+				<property name="username" value="LEE" />
+				<property name="password" value="oracle" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="/mapper/order-mapper.xml" />
+	</mappers>
+	
+</configuration>

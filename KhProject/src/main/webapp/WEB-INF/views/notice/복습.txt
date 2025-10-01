@@ -1,0 +1,45 @@
+Web의 3요소
+
+HTML
+CSS
+JS
+
+<html>
+	<head>
+		<title>하이</title>
+		<style>
+			h1{
+				font-size : 48px;
+				color : red;
+			}
+		
+		</style>
+	</head>
+	<body>
+		<h1 id="first">문서의 제목</h1>
+		<h1>두 개</h1>
+		
+		<script>
+			document.getElementById("first").innerText = '제목';
+		</script>
+		
+		<header>문서의 머리부분
+			<ul>
+				<li>목록에 보여질 정보</li>
+				<li>목록에 보여질 정보</li>
+			</ul>
+		</header>
+		
+		<img src="이미지경로" />
+	
+		<h1>하나 더</h1>
+	</body>
+</html>
+
+
+
+
+
+
+
+

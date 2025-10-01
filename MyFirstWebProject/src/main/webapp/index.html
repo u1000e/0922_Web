@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>안녕하세요 인 덱스입니다.</title>
+<style>
+h1 {
+	color: red;
+	text-align: center;
+}
+</style>
+</head>
+<body>
+	<!-- 
+		1) 새로운 워크스페이스를 만들어서 이클립스로 열기
+		
+		2) 작업 환경 구성
+		
+			2_1) 보여질 U.I를 구성
+			
+			2_2) 서버 실행환경 구성[Window - Preferences]
+			(Server - Runtime Environments)
+			이클립스 상에서 서버를 실행할 수 있도록 실행환경을 연동하는 과정
+			Add버튼 클릭 -> 설치한 ApacheTomcat과 동일한 버전 선택 -> Next버튼 클릭
+			-> Browse버튼 클릭 -> 설치한 톰캣 폴더 선택 -> Finish버튼 클릭
+		
+		3) 서버 생성하기
+			
+			3_1) [Servers] - [New] - [Server]
+			
+			3_2) 창에 기본적으로 2_2에서 세팅해놓은 Runtime이 잡혀 있을 것
+			
+			3_3) Finish버튼 클릭
+			
+			3_4) 서버 세팅하기(만들어진 서버 더블클릭)
+			
+				3_4_1) 왼쪽하단에 ServerOption탭에 Serve Module Publishing 체크
+				=> file upload / download 경로 지정이 운영체제 상 숨김폴더로 지정
+				
+				3_4_2) 포트번호를 바꿔야한다면 재설정 => 작업이 끝나면 반드시 저장
+		
+		4) Dynamic Web Project만들기 [Project Explorer - new]
+		
+			4_1) 프로젝트명 신중하게 만들기 - Next
+			
+			4_2) default output folder 경로 재설정 : 
+				src/main/webapp/WEB-INF/classes
+			=> classes라는 폴더 안에 컴파일이 끝난 .class파일이 들어감
+			WEB-INF안에 만들어두지 않으면 외부에서 접근이 가능하기 때문에 보안상 위험함
+			
+			4_3) Context root : 애플리케이션만의 고유한 이름으로 지어줄 것(기본값 : 프로젝트명)
+			재정의해서 쓰는것이 보편적이고 실제로 자주 바뀔 수 있음
+			=> 하나의 서버로 여러 개의 애플리케이션을 구동할 수 있음
+			고유한 이름을 통해 애플리케이션에 접근하는 경로 사용할 수 있음
+			
+			Content Directory : 실제로 배포되는 폴더(서버에 올라가는 폴더)의 최상위 폴더명!
+			=> 변경 시 default output folder로 돌아가서 그쪽도 변경해야함
+			
+			Generate web.xml deployment descriptor : 기본적으로는 체크가 안돼있음
+			=> web.xml에는 애플리케이션 전체 정보가 들어있음(메인페이지 지정)
+			굳이 바꿀 일 없어~~~ 하면은 안만들어도 무방
+			혹시나 수정을 할 수도있고 공부를 해야하니까 꼭 만들자!!!!
+			
+			Finish 버튼 클릭
+			
+		5) 새로만들어진 Project 확인하기
+		
+			5_1) src - main - webapp - WEB-INF - classes 폴더 잘 있나
+			
+			5_2) src - main - webapp - WEB-INF - web.xml 잘있나
+			
+			5_3) src - main - webapp - index.html 파일 만들기
+			
+		6) 생성해놓은 Server에 올리기
+		
+			[Server] -> Server 오른쪽 클릭 -> Add and Remove -> 왼쪽에서 선택 후 클릭
+			-> Finish
+		
+		7) 서버 실행 잘 되는거 확인했으면 브라우저 켜서 URL요청 보내서 index 파일 잘 나오나 확인
+	-->
+
+	<h1>이게 뭐야 ~ 이게 인덱스가 뭐야 배열아니야 ~~</h1>
+	
+	<hr>
+	
+	<h1>Web을 시작해봅시다.</h1>
+	
+	<h2> * Servlet </h2>
+	
+	<p>
+		서블릿이란? <br>
+		자바를 이용해서 웹을 만들기 위해 사용하는 기술이다. <br>	
+		웹 서비스를 위한 자바 "인터페이스/클래스" <br><br>
+		
+		- 사용자의 요청을 처리하고 그에 해당하는 응답페이지를 만들어서
+		  다시 사용자에게 전송해주는 역할(다이나믹 웹 프로젝트에서는 컨트롤러로 사용할 예정) <br>
+		- Java로 동적인 페이지를 구현할 수 있게 해주는 서버 측 프로그램(명세) <br>
+	
+		=> 서블릿 클래스에서 웹 페이지 구현을 위해 HTML을 한 번 사용해보자~~
+	</p>
+	
+	<h3><a href="views/request_get.html">Get 방식 테스트</a></h3>
+	
+	<h3><a href="views/request_post.html">Post 방식 테스트</a></h3>
+	
+	
+	
+	
+	
+</body>
+</html>
+
+
+
+
+
+

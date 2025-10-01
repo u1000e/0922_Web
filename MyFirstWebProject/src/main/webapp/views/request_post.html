@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>POST 방식 요청 테스트</title>
+<style>
+	ul {
+		list-style: none;
+		line-height: 200%;
+	}
+</style>
+</head>
+<body>
+	<h1>POST방식으로 요청 후 응답데이터 받아보기</h1>
+	
+	<pre>
+		특징 :
+		1. POST방식으로 요청을 보내면 BODY영역에 데이터를 포함시켜서 요청 <br>
+		=> 사용자가 입력한 값(데이터)들이 URL에 노출되지 않음 <br>
+		=> 로그인, 회원 가입 같은 기능들은 POST가 적합함 <br>
+		
+		2. 전송하는 길이에 제약이 없음 <br>
+		=> 즉, 게시글 작성 같은 경우 POST방식이 적합함 <br><br>
+		
+		3. 최대 요청 받는 시간이 존재함 <br>
+		
+		4. 새롭게 데이터를 만들어내는 기능에 사용됨
+	</pre>
+	
+	<h2> 사용자의 정보 받기 - POST </h2>
+	<p>정보를 입력하시고 입력한 후 버튼을 눌러주세요.</p>
+	
+	<!-- 
+		form태그 안에 존재하는 submit 버튼 클릭 했을 때
+		form태그의 속성 중 action속성에 작성된 URL로 요청이 감!!	
+		Controller에게 요청 보낸다!(Servlet)
+		
+		http://127.0.0.1:4000/first/서블릿매핑값.do
+	
+	-->
+	<form method="post" action="/first/post.do">
+		<ul>
+			<li>
+				이름 : <input type="text" name="name" maxlength="5" />
+			</li>
+			<li>
+				성별 :
+				남자 <input type="radio" name="gender" value="남" />
+				여자 <input type="radio" name="gender" value="여" />
+				선택안함 <input type="radio" name="gender" value="선택안함" />
+			</li>
+			<li>
+				나이 : <input type="number" name="age" value="0" />
+			</li>
+			<li>
+				사는 지역 : 
+				<select name="city">
+					<option>서울</option>
+					<option>제주도</option>
+				</select>
+			</li>
+			<li>
+				키 : <input type="range" min="130" max="220" name="height" />
+			</li>
+			<li>
+				좋아하는 음식(모두 고르시오)
+				피자 <input type="checkbox" name="food" value="피자"/>
+				치킨 <input type="checkbox" name="food" value="치킨"/>
+				떡볶이 <input type="checkbox" name="food" value="떡볶이"/>
+				돼지고기 <input type="checkbox" name="food" value="돼지고기"/>
+				초밥 <input type="checkbox" name="food" value="초밥"/>
+			</li>
+			<li>
+				<input type="submit" value="요청보내기"/>
+				<input type="reset" value="초기화"/>
+			</li>
+		</ul>
+	</form>	
+	
+	
+	
+	
+	
+
+</body>
+</html>

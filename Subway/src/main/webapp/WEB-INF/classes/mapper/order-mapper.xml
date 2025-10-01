@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderMapper">
+
+	<insert id="insertOrder"
+			parameterType="com.kh.subway.model.vo.Subway">
+		INSERT
+		  INTO
+		       TB_SUBWAY
+		VALUES
+		       (
+		       #{name}
+		     , #{phone}
+		     , #{address}
+		     , #{request}
+		     , #{sandwich}
+		     , #{vegetable}
+		     , #{sauce}
+		     , #{cookie}
+		     , #{payment}
+		     , SYSDATE
+		       )
+	</insert>
+	
+	
+	<select id="findAll"
+			resultType="com.kh.subway.model.vo.Subway">
+		SELECT
+		       NAME
+		     , PHONE
+		     , ADDRESS
+		     , REQUEST
+		     , SANDWICH
+		     , VEGETABLE
+		     , SAUCE
+		     , COOKIE
+		     , PAYMENT
+		     , ORDER_DATE orderDate
+		  FROM
+		       TB_SUBWAY
+		 ORDER
+		    BY
+			   orderDate DESC
+	</select>
+	
+	
+	
+	
+	
+	
+
+ 
+</mapper>
