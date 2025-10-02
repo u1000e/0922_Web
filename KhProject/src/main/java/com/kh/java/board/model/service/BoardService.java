@@ -121,9 +121,106 @@ public class BoardService {
 		return result * result2;
 	}
 	
+	public int update(Board board, Attachment at) {
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		int boardResult = bd.updateBoard(sqlSession, board);
+		
+		// Attachment~
+		// 새 첨부파일이 없을 때
+		int atResult = 1;
+		
+		// 새 첨부파일이 존재할 경우
+		if(at != null) {
+			if(at.getFileNo() != null) {
+				// case 1
+				// 기존에 첨부파일이 있따 => UPDATE
+				atResult = bd.updateAttachment(sqlSession, at);
+			} else {
+				// case 2
+				// 기존 첨부파일 없음 => INSERT
+				atResult = bd.insertAttachment(sqlSession, at);
+			}
+		} // 없으면 뭐 할거없음
+		
+		// 둘 다 성공했을 때 만 commit;
+		// 하나라도 실패했으면 rollback;
+		if(boardResult * atResult > 0) {
+			sqlSession.commit();
+		} else {
+			sqlSession.rollback();
+		}
+		
+		sqlSession.close();
+		
+		return (boardResult * atResult);
+	}
 	
+	public int searchedCount(Map<String, Object> map) {
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		int count = bd.searchedCount(sqlSession, map);
+		
+		sqlSession.close();
+		
+		return count;
+	}
 	
+	public List<Board> selectSearchList(Map<String, Object> map){
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		List<Board> boards = bd.selectSearchList(sqlSession, map);
+		
+		sqlSession.close();
+		
+		return boards;
+	}
 	
+	public int insertImage(Board board, List<Attachment> files) {
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		// 보드에 INSERT하는거 만들어놨음
+		// Attachment에 INSERT하는거 만들어놨음
+		
+		int result = 0;
+		
+		try {
+			// 1. 게시글 INSERT
+			result = bd.insertImageBoard(sqlSession, board);
+			
+			// 2. 게시글 INSERT가 성공 시 첨부파일들 INSERT
+			if(result > 0) {
+				
+				// 첨부파일 개수만큼 INSERT
+				for(Attachment file : files) {
+					file.setRefBno(board.getBoardNo());
+					
+					result = bd.insertAttachmentList(sqlSession, file);
+					
+					if(result == 0) {
+						break;
+					}
+				}
+			}
+			
+			// 3. 다성공했으면 Commit
+			if(result > 0) {
+				sqlSession.commit();
+			} else {
+				sqlSession.rollback();
+			}
+		} catch(Exception e) {
+			sqlSession.rollback();
+			e.printStackTrace();
+			result = 0;
+		} finally {
+			sqlSession.close();
+		}
+		return result;
+	}
 	
 	
 	

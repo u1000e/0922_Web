@@ -3,6 +3,24 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardMapper">
+
+	<sql id="boardList">
+		SELECT
+		       BOARD_NO boardNo
+		     , CATEGORY_NAME category
+		     , USER_NAME boardWriter
+		     , BOARD_TITLE boardTitle
+		     , CREATE_DATE createDate
+		     , COUNT
+	      FROM
+	           KH_BOARD
+	      JOIN
+	           KH_CATEGORY USING (CATEGORY_NO)
+	      JOIN
+	           KH_MEMBER ON (BOARD_WRITER = USER_NO)
+	     WHERE
+	           KH_BOARD.STATUS = 'Y'
+	</sql>
 	
 	<select id="selectListCount"
 			resultType="_int">
@@ -20,21 +38,7 @@
 	<select id="selectBoardList"
 			parameterType="com.kh.java.common.vo.PageInfo"
 			resultType="com.kh.java.board.model.vo.Board">
-		SELECT
-		       BOARD_NO boardNo
-		     , CATEGORY_NAME category
-		     , USER_NAME boardWriter
-		     , BOARD_TITLE boardTitle
-		     , CREATE_DATE createDate
-		     , COUNT
-	      FROM
-	           KH_BOARD
-	      JOIN
-	           KH_CATEGORY USING (CATEGORY_NO)
-	      JOIN
-	           KH_MEMBER ON (BOARD_WRITER = USER_NO)
-	     WHERE
-	           KH_BOARD.STATUS = 'Y'
+		<include refid="boardList" />
 	       AND
 	           BOARD_TYPE = 1
 	     ORDER
@@ -273,6 +277,129 @@
   		 WHERE
   		       REF_BNO = #{boardNo}
   	</update>
+  	
+  	<update
+  	        id="updateBoard"
+  	        parameterType="com.kh.java.board.model.vo.Board">
+  		UPDATE
+  		       KH_BOARD        
+  		   SET
+  		       BOARD_TITLE = #{boardTitle}
+  		     , BOARD_CONTENT = #{boardContent}
+  		     , CATEGORY_NO = #{category}
+  		 WHERE
+  		       BOARD_NO = #{boardNo}
+  		   AND
+  		       STATUS = 'Y'
+  		   AND
+  		       BOARD_WRITER = #{boardWriter}
+  	</update>
+  	
+  	<update id="updateAttachment"
+  	        parameterType="com.kh.java.board.model.vo.Attachment">
+  		UPDATE
+  		       KH_ATTACHMENT
+  		   SET        
+  		       ORIGIN_NAME = #{originName}
+  		     , CHANGE_NAME = #{changeName}
+  		     , FILE_PATH = #{filePath}
+  		 WHERE
+  	           FILE_NO = #{fileNo}
+  	</update>
+  	
+  	<select id="searchedCount" parameterType="hashmap" resultType="_int">
+  		select
+  		       count(*)
+  		  from
+  		       kh_board
+  		  join
+  		       kh_member on(board_writer = user_no)
+  		 where
+  		       kh_board.status = 'Y'
+  		<if test="condition == 'content'">
+  		   and
+  		       board_content
+  		</if>
+  		<if test="condition == 'writer'">
+  		   and
+  		       user_name
+  		</if>
+  		<if test="condition == 'title'">
+  		   and
+  		       board_title
+  		</if>
+  		  like '%' || #{keyword} || '%'
+  	</select>
+  	
+  	
+  	<select id="selectSearchList" parameterType="hashmap"
+  	        resultType="com.kh.java.board.model.vo.Board">
+  		<include refid="boardList" />
+  		<choose>
+  			<when test="condition == 'writer'">
+  				AND USER_NAME
+  			</when>
+  			<when test="condition == 'title'">
+  				AND BOARD_TITLE
+  			</when>
+  			<otherwise>
+  				AND BOARD_CONTENT
+  			</otherwise>
+  		</choose>
+  		   LIKE '%' || #{keyword} || '%'
+  		 ORDER
+  		    BY
+  		       BOARD_NO DESC
+  		OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+  	</select>
+  	
+  	<insert id="insertImageBoard"
+  			parameterType="com.kh.java.board.model.vo.Board">
+  		<selectKey resultType="long" keyProperty="boardNo"
+  				   order="BEFORE">
+  			SELECT SEQ_BNO.NEXTVAL FROM DUAL
+  		</selectKey>
+  		INSERT
+  		  INTO
+  		       KH_BOARD
+  		       (
+  		       BOARD_NO
+  		     , BOARD_TYPE
+  		     , BOARD_TITLE
+  		     , BOARD_CONTENT
+  		     , BOARD_WRITER
+  		       )
+  		VALUES
+  		       (
+  		       #{boardNo}
+  		     , 2
+  		     , #{boardTitle}
+  		     , #{boardContent}
+  		     , #{boardWriter}
+  		       )
+  	</insert>
+  	
+  	
+  	<insert id="insertAttachmentList"
+  			parameterType="com.kh.java.board.model.vo.Attachment">
+  		INSERT		
+  		  INTO
+  		       KH_ATTACHMENT
+  		VALUES
+  		       (
+			   SEQ_FNO.NEXTVAL
+			 , #{refBno}
+			 , #{originName}
+			 , #{changeName}
+			 , #{filePath}
+			 , SYSDATE
+			 , #{fileLevel}
+			 , 'Y'  		       
+  		       )
+  	</insert>
+  	
+  	
+  	
   	
   	
   	

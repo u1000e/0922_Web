@@ -115,7 +115,7 @@
             <a class="nav-link js-scroll-trigger" href="/kh/boards?page=1">게시판</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#">사진게시판</a>
+            <a class="nav-link js-scroll-trigger" href="/kh/images">사진게시판</a>
           </li>
           
           <!-- 
