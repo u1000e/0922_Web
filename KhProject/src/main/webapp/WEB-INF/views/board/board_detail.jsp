@@ -100,15 +100,21 @@ localhost:4000/kh/resources/board_upfiles/KHacademy_20250930172348_627.jpg
 				<thead>
 					<tr>
 						<th>댓글작성</th>
+						
+							<c:choose>
+							<c:when test="${ sessionScope.userInfo ne null }">
 							<td>
 								<textarea id="replyContent" cols="50" rows="3" style="resize:none;" class="form-control"></textarea>
 							</td>
 							<td><button onclick="insertReply();" class="btn" style="width : 100%; height : 100%; background-color: #52b1ff; color : white;">댓글등록</button></td>
-						
+							</c:when>
+							<c:otherwise>
 							<td>
 								<textarea readonly cols="50" rows="3" style="resize:none;" class="form-control">로그인 후 이용가능한 서비스입니다.</textarea>
 							</td>
 							<td><button class="btn" style="width : 100%; height : 100%; background-color: #52b1ff; color : white;">댓글등록</button></td>
+							</c:otherwise>
+							</c:choose>
 					</tr>
 				</thead>
 				<tbody>
@@ -120,7 +126,64 @@ localhost:4000/kh/resources/board_upfiles/KHacademy_20250930172348_627.jpg
 
 	</div>
 	
+	<script>
+		function insertReply(){
+			// 댓글작성 요청 -> KH_REPLY 한 행 INSERT
+			// 게시글번호, 댓글 내용, 작성자 번호
+			
+			const content = $("#replyContent").val();
+			
+			$.ajax({
+				url : "insert.reply",
+				type : "POST",
+				data : {
+					replyContent : content,
+					boardNo : ${map.board.boardNo}
+				},
+				success : function(result){
+					//console.log(result);
+					
+					if(result === 'success'){
+						$('#replyContent').val('');
+						selectReply();
+					}
+				}
+			});
+		}
+		
+		$(function(){
+			selectReply();
+		})
+		
+		function selectReply(){
+			
+			$.ajax({
+				url : "list.reply",
+				type : "get",
+				data : {
+					boardNo : ${map.board.boardNo}
+				},
+				success : function(result){
+					// console.log(result);
+					
+					const str = result.map(e => `
+												<tr>
+													<td>\${e.replyWriter}</td>
+													<td>\${e.replyContent}</td>
+													<td>\${e.createDate}</td>
+												</tr>
+											   `).join('');
+					
+					$('tbody').html(str);
+				}
+			});
+		}
+	
+	</script>
+	
 	<jsp:include page="../include/footer.jsp" />
+	
+
 	
 	
 </body>

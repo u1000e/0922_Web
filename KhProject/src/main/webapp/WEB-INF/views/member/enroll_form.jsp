@@ -23,6 +23,50 @@
 
 	<jsp:include page="../include/header.jsp" />
 	
+	<script>
+	
+		function idCheck(){
+			
+			// console.log('하하호ㅗㅎ');
+			
+			// 아이디 중복체크 구현하기
+			// 사용자가 입력한 아이디값
+			const $userId = $("#user_id").val();
+			// console.log($userId);
+			
+			// 사용자가 입력한 아이디값이 다섯글자 이상일 때만 중복검사
+			if($userId.length >= 5){
+				
+				// 아이디가 중복값이 존재하는가 검사
+				$.ajax({
+					url: "checkId",
+					type: "get",
+					data: {
+						id : $userId
+					},
+					success : function(response){
+						
+						// console.log(response);
+						// response 경우의수 : NNNNN / NNNNY
+						if(response === 'NNNNN'){
+							$('#idChk').css('font-size', '12px')
+									   .css('color', 'red')
+									   .text('이미 존재하는 아이디 입니다.');
+						} else{
+							$('#idChk').css('font-size', '12px')
+									   .css('color', 'green')
+									   .text('사용 가능한 아이디 입니다.');
+						}
+						
+					}
+				});
+			} else {
+				$('#idChk').text('');
+			}
+		}
+	
+	</script>
+	
 	<div style="width : 80%; margin : auto; padding : 50px;">
 		<form action="members" name="signup" id="signUpForm" method="post"
 						style="margin-bottom: 0;">
@@ -38,7 +82,7 @@
 						class="form-control tooltipstered" maxlength="14"
 						required="required" aria-required="true"
 						style="margin-bottom: 25px; width: 100%; height: 40px; border: 1px solid #d9d9de"
-						placeholder="숫자와 영어로 4-30자">
+						placeholder="숫자와 영어로 4-30자" onkeyup="idCheck();">
 						</td>
 					
 				</tr>

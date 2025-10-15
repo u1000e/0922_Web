@@ -7,9 +7,12 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import com.kh.java.board.model.dao.BoardDao;
+import com.kh.java.board.model.dto.BoardDto;
+import com.kh.java.board.model.dto.ImageBoardDto;
 import com.kh.java.board.model.vo.Attachment;
 import com.kh.java.board.model.vo.Board;
 import com.kh.java.board.model.vo.Category;
+import com.kh.java.board.model.vo.Reply;
 import com.kh.java.common.Template;
 import com.kh.java.common.vo.PageInfo;
 
@@ -221,6 +224,77 @@ public class BoardService {
 		}
 		return result;
 	}
+	
+	public List<ImageBoardDto> selectImageList(){
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		List<ImageBoardDto> boards = bd.selectImageList(sqlSession);
+		
+		sqlSession.close();
+		
+		return boards;
+	}
+	
+	public BoardDto selectImageDetail(Long boardNo){
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		// UPDATE KH_BOARD
+		int updateResult = bd.increaseCount(sqlSession, boardNo.intValue());
+		
+		// SELECT ONE KH_BOARD
+		// SELECT LIST KH_ATTACHMENT
+		if(updateResult > 0) {
+			sqlSession.commit();
+			//Board board = bd.selectBoard(sqlSession, boardNo.intValue());
+			//List<Attachment> files = bd.selectAttachmentList(sqlSession, boardNo.intValue());
+			//Map<String, Object> map = new HashMap();
+			//map.put("board", board);
+			//map.put("files", files);
+			BoardDto boards = bd.selectBoardAndAttachment(sqlSession, boardNo);
+			// System.out.println(boards);
+			return boards;
+		}
+		
+		return null;
+	}
+	
+	
+	public int insertReply(Reply reply) {
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		int result = bd.insertReply(sqlSession, reply);
+		
+		if(result > 0) {
+			sqlSession.commit();
+		}
+		
+		sqlSession.close();
+		
+		return result;
+	}
+	
+	public List<Reply> selectReply(Long boardNo){
+		
+		SqlSession sqlSession = Template.getSqlSession();
+		
+		List<Reply> reply = bd.selectReply(sqlSession, boardNo);
+		
+		sqlSession.close();
+		
+		return reply;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

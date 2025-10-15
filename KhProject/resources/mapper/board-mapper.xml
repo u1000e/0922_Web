@@ -217,6 +217,7 @@
   		     , BOARD_CONTENT boardContent
   		  FROM
   		       KH_BOARD
+  		  LEFT
   		  JOIN
   		       KH_CATEGORY USING (CATEGORY_NO)
   		  JOIN
@@ -241,6 +242,9 @@
   		       STATUS = 'Y'
   		   AND
   		       REF_BNO = #{boardNo}
+  		 ORDER
+  		    BY
+  		       FILENO ASC
   	</select>
   	
   	<select
@@ -397,6 +401,103 @@
 			 , 'Y'  		       
   		       )
   	</insert>
+  	
+  	<select id="selectImageList"
+  			resultType="com.kh.java.board.model.dto.ImageBoardDto">
+  		SELECT
+		       BOARD_NO boardNo
+		     , BOARD_TITLE boardTitle
+		     , COUNT
+		     , FILE_PATH filePath
+		     , CHANGE_NAME changeName
+		  FROM
+		       KH_BOARD
+		  JOIN
+		       KH_ATTACHMENT ON (REF_BNO = BOARD_NO)
+		 WHERE
+		       BOARD_TYPE = 2
+		   AND
+		       KH_BOARD.STATUS = 'Y'
+		 ORDER
+		    BY
+		       BOARD_NO DESC
+  	</select>
+  	
+  	<resultMap id="boardResultSet" type="com.kh.java.board.model.dto.BoardDto">
+  		<id column="boardNo" property="boardNo" />
+  		<result column="boardTitle" property="boardTitle" />
+  		<result column="boardContent" property="boardContent" />
+  		<collection property="files" ofType="com.kh.java.board.model.vo.Attachment">
+  			<id column="fileNo" property="fileNo" />
+  			<result column="changeName" property="changeName" />
+  			<result column="filePath" property="filePath" />
+  		</collection>
+  	</resultMap>
+  	
+  	<select id="selectBoardAndAttachment"
+  			parameterType="long" resultMap="boardResultSet">
+  		SELECT
+  		       BOARD_NO boardNo
+  		     , BOARD_TITLE boardTitle
+  		     , BOARD_CONTENT boardContent
+  		     , FILE_NO fileNo
+  		     , CHANGE_NAME changeName
+  		     , FILE_PATH filePath
+  		  FROM
+  		       KH_BOARD
+  		  JOIN
+  			   KH_ATTACHMENT ON (BOARD_NO = REF_BNO)
+  	     WHERE
+  	           BOARD_NO = #{boardNo}
+  	     ORDER
+  	        BY
+  			   FILE_NO ASC
+  	</select>
+  	
+  	
+  	<insert id="insertReply"
+  			parameterType="com.kh.java.board.model.vo.Reply">
+  		INSERT		
+  		  INTO
+  		       KH_REPLY
+  			   (
+  			   REPLY_NO
+  			 , REF_BNO
+  			 , REPLY_CONTENT
+  			 , REPLY_WRITER
+  			   )
+  		VALUES
+  		       (
+  		       SEQ_RNO.NEXTVAL
+  		     , #{refBno}
+  		     , #{replyContent}
+  		     , #{replyWriter}
+  		       )
+  			
+ 	</insert>
+  	
+  	<select id="selectReply"
+  			resultType="com.kh.java.board.model.vo.Reply">
+  		SELECT
+  		       REPLY_NO replyNo
+  		     , REPLY_CONTENT replyContent
+  		     , USER_ID replyWriter
+  		     , CREATE_DATE createDate
+  		  FROM
+  		       KH_REPLY
+  		  JOIN
+  		       KH_MEMBER ON (REPLY_WRITER = USER_NO)
+  		 WHERE
+  		       KH_REPLY.STATUS = 'Y'
+  		   AND
+  		       REF_BNO = #{boardNo}
+  		 ORDER
+  		    BY createDate DESC
+  	</select>
+  	
+  	
+  	
+  	
   	
   	
   	
